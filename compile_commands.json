@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build",
+  "command": "/usr/local/bin/g++  -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/include -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build/include -g -std=gnu++20 -o CMakeFiles/danejoe_logger.dir/source/logger/logger_manager.cpp.o -c /home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/logger/logger_manager.cpp",
+  "file": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/logger/logger_manager.cpp",
+  "output": "CMakeFiles/danejoe_logger.dir/source/logger/logger_manager.cpp.o"
+},
+{
+  "directory": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build",
+  "command": "/usr/local/bin/g++  -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/include -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build/include -g -std=gnu++20 -o CMakeFiles/danejoe_logger.dir/source/logger/i_logger.cpp.o -c /home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/logger/i_logger.cpp",
+  "file": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/logger/i_logger.cpp",
+  "output": "CMakeFiles/danejoe_logger.dir/source/logger/i_logger.cpp.o"
+},
+{
+  "directory": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build",
+  "command": "/usr/local/bin/g++  -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/include -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build/include -g -std=gnu++20 -o CMakeFiles/danejoe_logger.dir/source/logger/async_logger.cpp.o -c /home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/logger/async_logger.cpp",
+  "file": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/logger/async_logger.cpp",
+  "output": "CMakeFiles/danejoe_logger.dir/source/logger/async_logger.cpp.o"
+},
+{
+  "directory": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build",
+  "command": "/usr/local/bin/g++  -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/include -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build/include -g -std=gnu++20 -o CMakeFiles/danejoe_logger.dir/source/util/process_util.cpp.o -c /home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/util/process_util.cpp",
+  "file": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/util/process_util.cpp",
+  "output": "CMakeFiles/danejoe_logger.dir/source/util/process_util.cpp.o"
+},
+{
+  "directory": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build",
+  "command": "/usr/local/bin/g++  -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/include -I/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/build/include -g -std=gnu++20 -o CMakeFiles/danejoe_logger.dir/source/util/time_util.cpp.o -c /home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/util/time_util.cpp",
+  "file": "/home/danejoe001/personal_code/code_cpp_library/library_danejoe_log/source/util/time_util.cpp",
+  "output": "CMakeFiles/danejoe_logger.dir/source/util/time_util.cpp.o"
+}
+]

@@ -10,7 +10,7 @@ namespace DaneJoe
      * @class UtilProcess
      * @brief 进程工具类
      */
-    class UtilProcess
+    class ProcessUtil
     {
     public:
         /**

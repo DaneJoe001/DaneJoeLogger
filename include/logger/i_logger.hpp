@@ -1,5 +1,12 @@
 #pragma once
 
+/**
+ * @file i_logger.hpp
+ * @brief 日志接口类头文件
+ * @details 日志接口类
+ * @author DaneJoe001
+ */
+
 #include <format>
 #include <string>
 #include <thread>
@@ -287,6 +294,7 @@ namespace DaneJoe
          * @return 日志级别
          */
         LogLevel to_log_level(std::string level_str);
+        void set_output_settings(const LogOutputSetting& settings);
         void set_config(const LoggerConfig& config);
         /**
          * @brief 获取进程ID

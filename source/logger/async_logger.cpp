@@ -3,11 +3,11 @@
 #include <string>
 #include <filesystem>
 
-#include "log/danejoe_logger.hpp"
+#include "logger/async_logger.hpp"
 
 namespace fs = std::filesystem;
 
-DaneJoe::DaneJoeLogger::DaneJoeLogger()
+DaneJoe::AsyncLogger::AsyncLogger()
 {
     if (m_config.enable_async)
     {
@@ -15,12 +15,12 @@ DaneJoe::DaneJoeLogger::DaneJoeLogger()
     }
 }
 
-DaneJoe::DaneJoeLogger::~DaneJoeLogger()
+DaneJoe::AsyncLogger::~AsyncLogger()
 {
     stop_async_log();
 }
 
-DaneJoe::DaneJoeLogger::DaneJoeLogger(const LoggerConfig& config) :ILogger(config)
+DaneJoe::AsyncLogger::AsyncLogger(const LoggerConfig& config) :ILogger(config)
 {
     if (config.enable_async)
     {
@@ -28,7 +28,7 @@ DaneJoe::DaneJoeLogger::DaneJoeLogger(const LoggerConfig& config) :ILogger(confi
     }
 }
 
-void DaneJoe::DaneJoeLogger::stop_async_log()
+void DaneJoe::AsyncLogger::stop_async_log()
 {
     {
         std::unique_lock<std::mutex> lock(m_console_log_queue_mutex);
@@ -58,7 +58,7 @@ void DaneJoe::DaneJoeLogger::stop_async_log()
     }
 }
 
-void DaneJoe::DaneJoeLogger::log_msg(LogLevel level,
+void DaneJoe::AsyncLogger::log_msg(LogLevel level,
     const std::string& module,
     const std::string& log_info,
     const std::string& file_name,
@@ -104,7 +104,7 @@ void DaneJoe::DaneJoeLogger::log_msg(LogLevel level,
     }
 }
 
-bool DaneJoe::DaneJoeLogger::open_log_file()
+bool DaneJoe::AsyncLogger::open_log_file()
 {
     if (m_log_file.is_open())
     {
@@ -127,10 +127,10 @@ bool DaneJoe::DaneJoeLogger::open_log_file()
 
 std::shared_ptr<DaneJoe::ILogger> DaneJoe::DaneJoeLoggerCreator::operator()(const ILogger::LoggerConfig& config)
 {
-    return std::make_shared<DaneJoeLogger>(config);
+    return std::make_shared<AsyncLogger>(config);
 }
 
-void DaneJoe::DaneJoeLogger::async_file_log_handler()
+void DaneJoe::AsyncLogger::async_file_log_handler()
 {
     while (true)
     {
@@ -160,7 +160,7 @@ void DaneJoe::DaneJoeLogger::async_file_log_handler()
     }
 }
 
-void DaneJoe::DaneJoeLogger::async_console_log_handler()
+void DaneJoe::AsyncLogger::async_console_log_handler()
 {
     while (true)
     {
@@ -185,17 +185,17 @@ void DaneJoe::DaneJoeLogger::async_console_log_handler()
     }
 }
 
-void DaneJoe::DaneJoeLogger::start_async_log()
+void DaneJoe::AsyncLogger::start_async_log()
 {
     if (!m_async_file_log_flag.load())
     {
         m_async_file_log_flag.store(true);
-        m_async_file_log_thread = std::thread(&DaneJoeLogger::async_file_log_handler, this);
+        m_async_file_log_thread = std::thread(&AsyncLogger::async_file_log_handler, this);
     }
     if (!m_async_console_log_flag.load())
     {
         m_async_console_log_flag.store(true);
-        m_async_console_log_thread = std::thread(&DaneJoeLogger::async_console_log_handler, this);
+        m_async_console_log_thread = std::thread(&AsyncLogger::async_console_log_handler, this);
     }
 
 }

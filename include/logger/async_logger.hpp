@@ -1,12 +1,18 @@
 #pragma once
 
+/**
+ * @file async_logger.hpp
+ * @brief DaneJoe异步日志类头文件
+ * @author DaneJoe001
+ */
+
 #include <fstream>
 #include <thread>
 #include <queue>
 #include <mutex>
 #include <condition_variable>
 
-#include "log/i_logger.hpp"
+#include "logger/i_logger.hpp"
 
 /**
  * @namespace DaneJoe
@@ -18,22 +24,22 @@ namespace DaneJoe
      * @class DaneJoeLogger
      * @brief DaneJoe日志类
      */
-    class DaneJoeLogger : public ILogger
+    class AsyncLogger : public ILogger
     {
     public:
         /**
          * @brief 构造函数
          */
-        DaneJoeLogger();
+        AsyncLogger();
         /**
          * @brief 析构函数
          */
-        ~DaneJoeLogger();
+        ~AsyncLogger();
         /**
          * @brief 构造函数
          * @param config 日志配置
          */
-        DaneJoeLogger(const LoggerConfig& config);
+        AsyncLogger(const LoggerConfig& config);
     protected:
         /**
          * @brief 日志消息

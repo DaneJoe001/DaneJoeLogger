@@ -1,10 +1,10 @@
-#include "log/danejoe_logger.hpp"
-#include "log/manage_logger.hpp"
+#include "logger/async_logger.hpp"
+#include "logger/logger_manager.hpp"
 #include <thread>
 
 int main()
 {
-    DaneJoe::DaneJoeLogger::LoggerConfig log_config;
+    DaneJoe::AsyncLogger::LoggerConfig log_config;
     log_config.log_name = "DaneJoe";
     DaneJoe::ManageLogger& manage_logger = DaneJoe::ManageLogger::get_instance();
     manage_logger.add_logger("default", log_config);

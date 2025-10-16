@@ -1,12 +1,19 @@
 #pragma once
 
+/**
+ * @file logger_manager.hpp
+ * @brief 日志管理类
+ * @details 日志管理类
+ * @author DaneJoe001
+ */
+
 #include <unordered_map>
 #include <string>
 #include <memory>
 #include <thread>
 #include <functional>
 
-#include "log/i_logger.hpp"
+#include "logger/i_logger.hpp"
 
 /**
  * @namespace DaneJoe
@@ -76,7 +83,6 @@ namespace DaneJoe
         DaneJoe::ILogger::LoggerConfig m_default_log_config;
     };
 }
-
 /**
  * @brief 日志宏
  * @param log_name 日志名称

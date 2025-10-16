@@ -1,5 +1,5 @@
-#include "log/manage_logger.hpp"
-#include "log/danejoe_logger.hpp"
+#include "logger/logger_manager.hpp"
+#include "logger/async_logger.hpp"
 
 
 DaneJoe::ManageLogger::ManageLogger()

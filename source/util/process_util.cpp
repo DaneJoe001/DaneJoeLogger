@@ -4,9 +4,9 @@
 #include "unistd.h"
 #endif
 
-#include "util/util_process.hpp"
+#include "util/process_util.hpp"
 
-int DaneJoe::UtilProcess::get_pid()
+int DaneJoe::ProcessUtil::get_pid()
 {
 #ifdef WIN32
     return int(GetCurrentProcessId());

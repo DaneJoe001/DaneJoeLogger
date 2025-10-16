@@ -1,8 +1,8 @@
 #include <sstream>
 
-#include "log/i_logger.hpp"
-#include "util/util_process.hpp"
-#include "util/util_time.hpp"
+#include "logger/i_logger.hpp"
+#include "util/process_util.hpp"
+#include "util/time_util.hpp"
 
 DaneJoe::ILogger::ILogger() {}
 
@@ -66,9 +66,14 @@ void DaneJoe::ILogger::set_config(const LoggerConfig& config)
     m_config = config;
 }
 
+void DaneJoe::ILogger::set_output_settings(const LogOutputSetting& settings)
+{
+    m_output_setting = settings;
+}
+
 int DaneJoe::ILogger::get_pid()
 {
-    return UtilProcess::get_pid();
+    return ProcessUtil::get_pid();
 }
 
 std::string DaneJoe::ILogger::get_header(LogLevel level,
@@ -80,7 +85,7 @@ std::string DaneJoe::ILogger::get_header(LogLevel level,
     int process_id,
     const std::string& thread_id)
 {
-    std::string time_str = NOW_TIME_STR;
+    std::string time_str = DANEJOE_NOW_TIME_STR;
     std::string header;
     if (m_output_setting.enable_time)
         header += std::format("[{}] ", time_str);

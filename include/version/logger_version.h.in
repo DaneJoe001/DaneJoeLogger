@@ -1,0 +1,18 @@
+#pragma once
+
+/**
+ * @file LOGGER_version.h.in
+ * @brief 由 CMake configure_file 生成的版本宏头文件
+ * @note
+ *   - 构建树路径：${CMAKE_CURRENT_BINARY_DIR}/include/version/LOGGER_version.h
+ *   - 安装树路径：${CMAKE_INSTALL_INCLUDEDIR}/version/LOGGER_version.h
+ * @code{.cpp}
+ *   #include <version/LOGGER_version.h>
+ *   std::cout << LOGGER_VERSION_STR; // "1.0.0"
+ * @endcode
+ */
+
+#define LOGGER_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define LOGGER_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define LOGGER_VERSION_PATCH @PROJECT_VERSION_PATCH@
+#define LOGGER_VERSION_STR   "@PROJECT_VERSION@"
