@@ -5,6 +5,8 @@
  * @brief 日志管理类
  * @details 日志管理类
  * @author DaneJoe001
+ * @version 0.1.1
+ * @date 2025-10-24
  */
 
 #include <unordered_map>
@@ -30,16 +32,18 @@ namespace DaneJoe
     public:
         /**
          * @brief 获取单例对象
+         * @return 单例对象引用
          */
         static ManageLogger& get_instance();
         /**
          * @brief 获取日志对象
-         * @details 当日志对象不存在时
+         * @details 当日志对象不存在时，会创建一个默认配置的日志对象
          * @param log_name 日志名称
          */
         std::shared_ptr<DaneJoe::ILogger> get_logger(const std::string& log_name);
         /**
          * @brief 添加日志对象
+         * @param logger_type 日志类型
          * @param log_config 日志配置
          */
         void add_logger(const std::string& logger_type, const DaneJoe::ILogger::LoggerConfig& log_config);

@@ -4,6 +4,8 @@
  * @file async_logger.hpp
  * @brief DaneJoe异步日志类头文件
  * @author DaneJoe001
+ * @version 0.1.1
+ * @date 2025-10-24
  */
 
 #include <fstream>

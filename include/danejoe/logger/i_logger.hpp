@@ -5,6 +5,8 @@
  * @brief 日志接口类头文件
  * @details 日志接口类
  * @author DaneJoe001
+ * @version 0.1.1
+ * @date 2025-10-24
  */
 
 #include <format>

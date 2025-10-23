@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(DaneJoeLogger VERSION 0.1.0 LANGUAGES CXX)
+project(DaneJoeLogger VERSION 0.1.1 LANGUAGES CXX)
 option(DANEJOE_LOGGER_BUILD_TESTS "Build tests for DaneJoeLogger" ON)
 
 # @brief 定义基础日志库目标
@@ -20,7 +20,7 @@ target_include_directories(DaneJoeLogger
     $<INSTALL_INTERFACE:include>
 )
 
-# @brief 以目标特性声明 C++17
+# @brief 以目标特性声明 C++20
 target_compile_features(DaneJoeLogger PUBLIC cxx_std_20)
 
 # @brief 依赖 Common 组件（使用 TimeUtil/ProcessUtil）
