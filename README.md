@@ -10,15 +10,20 @@ cmake --build build
 
 ## 运行示例/测试
 ```bash
-ctest --test-dir build -V -R logger\.demo
-# 或直接运行
-./build/library/logger/tests/danejoe_logger_demo
+ctest --test-dir build -L unit --output-on-failure
 ```
 
 ## 作为依赖使用
 CMake:
 ```cmake
 find_package(DaneJoeLogger CONFIG REQUIRED)
+add_executable(app main.cpp)
+target_link_libraries(app PRIVATE DaneJoe::Logger)
+```
+
+聚合包（推荐）：
+```cmake
+find_package(DaneJoe CONFIG REQUIRED COMPONENTS Logger)
 add_executable(app main.cpp)
 target_link_libraries(app PRIVATE DaneJoe::Logger)
 ```

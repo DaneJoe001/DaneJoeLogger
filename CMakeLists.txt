@@ -11,6 +11,8 @@ add_library(DaneJoeLogger
 )
 add_library(DaneJoe::Logger ALIAS DaneJoeLogger)
 
+set_target_properties(DaneJoeLogger PROPERTIES EXPORT_NAME Logger)
+
 # @brief 公开头文件目录
 # @note BUILD_INTERFACE 指向源码树；INSTALL_INTERFACE 指向安装树
 target_include_directories(DaneJoeLogger
@@ -20,6 +22,10 @@ target_include_directories(DaneJoeLogger
     $<INSTALL_INTERFACE:include>
 )
 
+if(MSVC)
+  target_compile_options(DaneJoeLogger PRIVATE /utf-8)
+endif()
+
 # @brief 以目标特性声明 C++20
 target_compile_features(DaneJoeLogger PUBLIC cxx_std_20)
 
@@ -27,7 +33,7 @@ target_compile_features(DaneJoeLogger PUBLIC cxx_std_20)
 set_target_properties(DaneJoeLogger PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION 0)
 
 # @brief 依赖 Common 组件（使用 TimeUtil/ProcessUtil）
-target_link_libraries(DaneJoeLogger PUBLIC DaneJoe::Commons)
+target_link_libraries(DaneJoeLogger PUBLIC DaneJoe::Common)
 
 # @brief 安装目标与头文件
 include(GNUInstallDirs)
@@ -73,8 +79,6 @@ install(FILES
 )
 
 if(DANEJOE_LOGGER_BUILD_TESTS)
-  include(CTest)
-  enable_testing()
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
     add_subdirectory(tests)
   endif()
