@@ -1,25 +1,25 @@
-#pragma once
-
 /**
  * @file async_logger.hpp
  * @brief DaneJoe异步日志类头文件
  * @author DaneJoe001
- * @version 0.1.1
- * @date 2025-10-24
+ * @version 0.2.0
+ * @date 2025-12-17
  */
+#pragma once
 
 #include <fstream>
 #include <thread>
 #include <queue>
 #include <mutex>
+#include <atomic>
 #include <condition_variable>
 
 #include "danejoe/logger/i_logger.hpp"
 
-/**
- * @namespace DaneJoe
- * @brief DaneJoe命名空间
- */
+ /**
+  * @namespace DaneJoe
+  * @brief DaneJoe命名空间
+  */
 namespace DaneJoe
 {
     /**
@@ -127,6 +127,6 @@ namespace DaneJoe
          * @param config 日志配置
          * @return 日志器
          */
-        std::shared_ptr<ILogger> operator()(const ILogger::LoggerConfig& config) override;
+        std::shared_ptr<ILogger> operator()(const LoggerConfig& config) override;
     };
 }

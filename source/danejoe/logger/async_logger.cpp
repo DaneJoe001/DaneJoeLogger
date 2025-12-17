@@ -32,20 +32,22 @@ void DaneJoe::AsyncLogger::stop_async_log()
 {
     {
         std::unique_lock<std::mutex> lock(m_console_log_queue_mutex);
+        m_async_console_log_flag.store(false);
+        m_console_log_queue_cond.notify_all();
         m_console_log_queue_cond.wait(lock, [this]()
             {
                 return m_console_log_queue.empty();
             });
-        m_async_console_log_flag.store(false);
         m_console_log_queue_cond.notify_all();
     }
     {
         std::unique_lock<std::mutex> lock(m_file_log_queue_mutex);
+        m_async_file_log_flag.store(false);
+        m_file_log_queue_cond.notify_all();
         m_file_log_queue_cond.wait(lock, [this]()
             {
                 return m_file_log_queue.empty();
             });
-        m_async_file_log_flag.store(false);
         m_file_log_queue_cond.notify_all();
     }
     if (m_async_file_log_thread.joinable())
@@ -125,7 +127,7 @@ bool DaneJoe::AsyncLogger::open_log_file()
     return false;
 }
 
-std::shared_ptr<DaneJoe::ILogger> DaneJoe::DaneJoeLoggerCreator::operator()(const ILogger::LoggerConfig& config)
+std::shared_ptr<DaneJoe::ILogger> DaneJoe::DaneJoeLoggerCreator::operator()(const LoggerConfig& config)
 {
     return std::make_shared<AsyncLogger>(config);
 }
@@ -134,28 +136,39 @@ void DaneJoe::AsyncLogger::async_file_log_handler()
 {
     while (true)
     {
-        if (!m_async_file_log_flag.load())
+        std::string log_str;
         {
-            return;
-        }
-        std::unique_lock<std::mutex> lock(m_file_log_queue_mutex);
-        m_file_log_queue_cond.wait(
-            lock,
-            [this]
+            std::unique_lock<std::mutex> lock(m_file_log_queue_mutex);
+            m_file_log_queue_cond.wait(
+                lock,
+                [this]
+                {
+                    return !m_file_log_queue.empty() || !m_async_file_log_flag.load();
+                });
+
+            if (m_file_log_queue.empty())
             {
-                return !m_file_log_queue.empty() || !m_async_file_log_flag.load();
-            });
-        if (!m_file_log_queue.empty())
-        {
-            std::string log_str = m_file_log_queue.front();
+                if (!m_async_file_log_flag.load())
+                {
+                    m_file_log_queue_cond.notify_all();
+                    return;
+                }
+                continue;
+            }
+
+            log_str = m_file_log_queue.front();
             m_file_log_queue.pop();
-            std::atomic_thread_fence(std::memory_order_seq_cst);
+            m_file_log_queue_cond.notify_all();
+        }
+
+        std::atomic_thread_fence(std::memory_order_seq_cst);
+        {
+            std::lock_guard<std::mutex> lock(m_file_mutex);
             if (open_log_file())
             {
                 m_log_file << log_str << std::endl;
                 std::flush(m_log_file);
             }
-            m_file_log_queue_cond.notify_all();
         }
     }
 }
@@ -164,23 +177,34 @@ void DaneJoe::AsyncLogger::async_console_log_handler()
 {
     while (true)
     {
-        if (!m_async_console_log_flag.load())
+        std::string log_str;
         {
-            return;
-        }
-        std::unique_lock<std::mutex> lock(m_console_log_queue_mutex);
-        m_console_log_queue_cond.wait(lock, [this]()
+            std::unique_lock<std::mutex> lock(m_console_log_queue_mutex);
+            m_console_log_queue_cond.wait(lock, [this]()
+                {
+                    return !m_console_log_queue.empty() || !m_async_console_log_flag.load();
+                });
+
+            if (m_console_log_queue.empty())
             {
-                return !m_console_log_queue.empty() || !m_async_console_log_flag.load();
-            });
-        if (!m_console_log_queue.empty())
-        {
-            std::string log_str = m_console_log_queue.front();
+                if (!m_async_console_log_flag.load())
+                {
+                    m_console_log_queue_cond.notify_all();
+                    return;
+                }
+                continue;
+            }
+
+            log_str = m_console_log_queue.front();
             m_console_log_queue.pop();
-            std::atomic_thread_fence(std::memory_order_seq_cst);
+            m_console_log_queue_cond.notify_all();
+        }
+
+        std::atomic_thread_fence(std::memory_order_seq_cst);
+        {
+            std::lock_guard<std::mutex> lock(m_console_mutex);
             std::cout << log_str << std::endl;
             std::flush(std::cout);
-            m_console_log_queue_cond.notify_all();
         }
     }
 }

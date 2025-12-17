@@ -1,40 +1,37 @@
-#pragma once
-
 /**
  * @file logger_manager.hpp
- * @brief 日志管理类
- * @details 日志管理类
+ * @brief 日志管理类头文件
  * @author DaneJoe001
- * @version 0.1.1
- * @date 2025-10-24
+ * @version 0.2.0
+ * @date 2025-12-17
  */
+#pragma once
 
 #include <unordered_map>
 #include <string>
 #include <memory>
-#include <thread>
-#include <functional>
+#include <mutex>
 
 #include "danejoe/logger/i_logger.hpp"
 
-/**
- * @namespace DaneJoe
- * @brief DaneJoe命名空间
- */
+ /**
+  * @namespace DaneJoe
+  * @brief DaneJoe命名空间
+  */
 namespace DaneJoe
 {
     /**
      * @class ManageLog
      * @brief 日志管理单例类
      */
-    class ManageLogger
+    class LoggerManager
     {
     public:
         /**
          * @brief 获取单例对象
          * @return 单例对象引用
          */
-        static ManageLogger& get_instance();
+        static LoggerManager& get_instance();
         /**
          * @brief 获取日志对象
          * @details 当日志对象不存在时，会创建一个默认配置的日志对象
@@ -46,7 +43,7 @@ namespace DaneJoe
          * @param logger_type 日志类型
          * @param log_config 日志配置
          */
-        void add_logger(const std::string& logger_type, const DaneJoe::ILogger::LoggerConfig& log_config);
+        void add_logger(const std::string& logger_type, const DaneJoe::LoggerConfig& log_config);
         /**
          * @brief 添加日志创建器
          * @param logger_type 日志类型
@@ -57,34 +54,36 @@ namespace DaneJoe
         /**
          * @brief 构造函数
          */
-        ManageLogger();
+        LoggerManager();
         /**
          * @brief 析构函数
          */
-        ~ManageLogger() = default;
+        ~LoggerManager() = default;
         /**
-         * @brief
+         * @brief 删除拷贝构造函数
          */
-        ManageLogger(const ManageLogger&) = delete;
+        LoggerManager(const LoggerManager&) = delete;
         /*
-         * @brief 移动赋值运算符
+         * @brief 删除移动赋值运算符
          */
-        ManageLogger(const ManageLogger&&) = delete;
+        LoggerManager(const LoggerManager&&) = delete;
         /**
-         * @brief 赋值运算符
+         * @brief 删除拷贝赋值运算符
          */
-        ManageLogger& operator=(const ManageLogger&) = delete;
+        LoggerManager& operator=(const LoggerManager&) = delete;
         /**
-         * @brief 移动赋值运算符
+         * @brief 删除移动赋值运算符
          */
-        ManageLogger& operator=(const ManageLogger&&) = delete;
+        LoggerManager& operator=(const LoggerManager&&) = delete;
     private:
+        /// @brief 互斥锁
+        std::mutex m_mutex;
         /// @brief 日志记录器表
         std::unordered_map<std::string, std::shared_ptr<DaneJoe::ILogger>> m_logger_map;
         /// @brief 日志创建器表
         std::unordered_map<std::string, std::shared_ptr<ILoggerCreator>> m_logger_creator_map;
         /// @brief 默认日志配置
-        DaneJoe::ILogger::LoggerConfig m_default_log_config;
+        DaneJoe::LoggerConfig m_default_log_config;
     };
 }
 /**
@@ -97,7 +96,7 @@ namespace DaneJoe
 #define DANEJOE_LOG_TRACE(log_name,module,fmt,...)\
 do\
 {\
-auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
+auto logger=DaneJoe::LoggerManager::get_instance().get_logger(log_name);\
     if(logger)\
     {\
         logger->trace(\
@@ -120,7 +119,7 @@ auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
 #define DANEJOE_LOG_DEBUG(log_name,module,fmt,...)\
 do\
 {\
-auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
+auto logger=DaneJoe::LoggerManager::get_instance().get_logger(log_name);\
     if(logger)\
     {\
         logger->debug(\
@@ -143,7 +142,7 @@ auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
 #define DANEJOE_LOG_INFO(log_name,module,fmt,...)\
 do\
 {\
-auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
+auto logger=DaneJoe::LoggerManager::get_instance().get_logger(log_name);\
     if(logger)\
     {\
         logger->info(\
@@ -166,7 +165,7 @@ auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
 #define DANEJOE_LOG_WARN(log_name,module,fmt,...)\
 do\
 {\
-auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
+auto logger=DaneJoe::LoggerManager::get_instance().get_logger(log_name);\
     if(logger)\
     {\
         logger->warn(\
@@ -189,7 +188,7 @@ auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
 #define DANEJOE_LOG_ERROR(log_name,module,fmt,...)\
 do\
 {\
-auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
+auto logger=DaneJoe::LoggerManager::get_instance().get_logger(log_name);\
     if(logger)\
     {\
         logger->error(\
@@ -212,7 +211,7 @@ auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
 #define DANEJOE_LOG_FATAL(log_name,module,fmt,...)\
 do\
 {\
-auto logger=DaneJoe::ManageLogger::get_instance().get_logger(log_name);\
+auto logger=DaneJoe::LoggerManager::get_instance().get_logger(log_name);\
     if(logger)\
     {\
         logger->fatal(\

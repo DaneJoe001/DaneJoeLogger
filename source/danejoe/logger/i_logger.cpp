@@ -1,8 +1,8 @@
 #include <sstream>
+#include <chrono>
 
 #include "danejoe/logger/i_logger.hpp"
-#include "danejoe/common/process_util.hpp"
-#include "danejoe/common/time_util.hpp"
+#include "danejoe/common/system/system_info.hpp"
 
 DaneJoe::ILogger::ILogger() {}
 
@@ -31,7 +31,7 @@ std::string DaneJoe::ILogger::to_string(const std::thread::id& thread_id)
     return oss.str();
 }
 
-DaneJoe::ILogger::LogLevel DaneJoe::ILogger::to_log_level(std::string level_str)
+DaneJoe::LogLevel DaneJoe::ILogger::to_log_level(std::string level_str)
 {
     LogLevel level = LogLevel::NONE;
     if (level_str == "TRACE")
@@ -73,7 +73,7 @@ void DaneJoe::ILogger::set_output_settings(const LogOutputSetting& settings)
 
 int DaneJoe::ILogger::get_pid()
 {
-    return ProcessUtil::get_pid();
+    return get_process_id();
 }
 
 std::string DaneJoe::ILogger::get_header(LogLevel level,
@@ -85,7 +85,24 @@ std::string DaneJoe::ILogger::get_header(LogLevel level,
     int process_id,
     const std::string& thread_id)
 {
-    std::string time_str = DANEJOE_NOW_TIME_STR;
+    std::time_t raw_time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::tm time_info;
+    std::tm* time_info_ptr = nullptr;
+#if defined(_WIN32)
+    localtime_s(&time_info, &raw_time_t); // Windows
+    time_info_ptr = &time_info;
+#elif defined(__linux__)
+    localtime_r(&raw_time_t, &time_info); // Linux
+    time_info_ptr = &time_info;
+#elif defined(__APPLE__)
+    localtime_r(&raw_time_t, &time_info); // macOS
+    time_info_ptr = &time_info;
+#else
+    time_info_ptr = std::localtime(&raw_time_t);
+#endif
+    std::ostringstream oss;
+    oss << std::put_time(time_info_ptr, "%Y-%m-%d %H:%M:%S");
+    std::string time_str = oss.str();
     std::string header;
     if (m_output_setting.enable_time)
         header += std::format("[{}] ", time_str);

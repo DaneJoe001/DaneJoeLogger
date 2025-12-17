@@ -2,6 +2,23 @@ cmake_minimum_required(VERSION 3.20)
 project(DaneJoeLogger VERSION 0.1.1 LANGUAGES CXX)
 option(DANEJOE_LOGGER_BUILD_TESTS "Build tests for DaneJoeLogger" ${BUILD_TESTING})
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+if(CMAKE_EXPORT_COMPILE_COMMANDS AND CMAKE_GENERATOR MATCHES "Ninja|Makefiles")
+  add_custom_target(update_compile_commands_${PROJECT_NAME} ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/compile_commands.json"
+            "${CMAKE_CURRENT_LIST_DIR}/compile_commands.json")
+endif()
+
+if(PROJECT_IS_TOP_LEVEL)
+  if(NOT TARGET DaneJoe::Common)
+    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/../common/CMakeLists.txt")
+      add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../common" "${CMAKE_CURRENT_BINARY_DIR}/_deps/common")
+    endif()
+  endif()
+endif()
+
 # @brief 定义基础日志库目标
 # @note 对外通过命名空间别名 `DaneJoe::Logger` 暴露
 add_library(DaneJoeLogger
@@ -79,6 +96,8 @@ install(FILES
 )
 
 if(DANEJOE_LOGGER_BUILD_TESTS)
+  include(CTest)
+  enable_testing()
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
     add_subdirectory(tests)
   endif()

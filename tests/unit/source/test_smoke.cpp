@@ -1,11 +1,9 @@
 #include <gtest/gtest.h>
 
-namespace
-{
+#include "danejoe/logger/logger_manager.hpp"
 
-TEST(LoggerSmokeTest, Dummy)
+TEST(LoggerSmokeTest, CanGetDefaultLogger)
 {
-    EXPECT_TRUE(true) << "logger unit smoke test";
+    auto logger = DaneJoe::LoggerManager::get_instance().get_logger("default");
+    EXPECT_TRUE(static_cast<bool>(logger));
 }
-
-} // namespace
