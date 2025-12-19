@@ -9,6 +9,8 @@
 
 #include <string>
 
+#include "danejoe/common/enum/enum_convert.hpp"
+
 /**
  * @namespace DaneJoe
  * @brief DaneJoe命名空间
@@ -34,8 +36,24 @@ namespace DaneJoe
         /// @brief 致命错误级别
         FATAL,
         /// @brief 未知级别
+        Unknown,
+        /// @brief 无输出级别
         NONE
     };
+
+    /**
+     * @brief 将日志级别转换为字符串（调试用）
+     * @param level 日志级别
+     * @return 对应的枚举字符串
+     */
+    std::string to_string(LogLevel level);
+    /**
+     * @brief 从字符串转换为日志级别
+     * @param enum_string 由 ENUM_TO_STRING 生成的枚举字符串
+     * @return 对应的枚举值，未知时返回 LogLevel::Unknown
+     */
+    template<>
+    LogLevel enum_cast<LogLevel>(const std::string& enum_string);
     /**
      * @struct LoggerConfig
      * @brief 日志配置结构体

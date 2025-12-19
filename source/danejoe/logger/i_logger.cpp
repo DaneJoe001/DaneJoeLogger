@@ -10,18 +10,7 @@ DaneJoe::ILogger::ILogger(LoggerConfig config) : m_config(config) {}
 
 std::string DaneJoe::ILogger::to_string(LogLevel level)
 {
-    std::string log_level_str = "UNKNOWN";
-    switch (level)
-    {
-    case LogLevel::TRACE:log_level_str = "TRACE";break;
-    case LogLevel::DEBUG:log_level_str = "DEBUG";break;
-    case LogLevel::INFO: log_level_str = "INFO";break;
-    case LogLevel::WARN: log_level_str = "WARN";break;
-    case LogLevel::ERROR:log_level_str = "ERROR";break;
-    case LogLevel::FATAL:log_level_str = "FATAL";break;
-    default: break;
-    }
-    return log_level_str;
+    return DaneJoe::to_string(level);
 }
 
 std::string DaneJoe::ILogger::to_string(const std::thread::id& thread_id)
@@ -33,7 +22,7 @@ std::string DaneJoe::ILogger::to_string(const std::thread::id& thread_id)
 
 DaneJoe::LogLevel DaneJoe::ILogger::to_log_level(std::string level_str)
 {
-    LogLevel level = LogLevel::NONE;
+    LogLevel level = LogLevel::Unknown;
     if (level_str == "TRACE")
     {
         level = LogLevel::TRACE;
@@ -57,6 +46,10 @@ DaneJoe::LogLevel DaneJoe::ILogger::to_log_level(std::string level_str)
     else if (level_str == "FATAL")
     {
         level = LogLevel::FATAL;
+    }
+    else if (level_str == "NONE")
+    {
+        level = LogLevel::NONE;
     }
     return level;
 }

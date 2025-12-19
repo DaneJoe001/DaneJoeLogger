@@ -7,6 +7,8 @@ add_executable(danejoe_logger_unit_tests
   "${CMAKE_CURRENT_LIST_DIR}/source/test_smoke.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/source/test_async_logger.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/source/test_logger_manager.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/source/test_logger_config.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/source/test_logger_manager_basic.cpp"
 )
 
 target_link_libraries(danejoe_logger_unit_tests
